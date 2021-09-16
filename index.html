@@ -17,7 +17,7 @@
     />
     <script>
       let version = 1
-      let showCalendar = false
+      let showGrid = false
 
       function toggleVersion() {
         version = version === 1 ? 2 : 1
@@ -35,72 +35,34 @@
 
         status.textContent = `Using Tailwind ${version}`
       }
-      function toggleCalendar() {
-        let calendar = document.getElementById('calendar')
-        showCalendar = !showCalendar
+      function toggleGrid() {
+        let grid = document.getElementById('grid')
+        showGrid = !showGrid
 
-        if (showCalendar) {
-          calendar.innerHTML = renderCalendar()
+        if (showGrid) {
+          grid.innerHTML = renderGrid()
         } else {
-          calendar.innerHTML = ''
+          grid.innerHTML = ''
         }
       }
 
-      function renderCalendar() {
+      function renderGrid() {
         return Array(100)
           .fill(null)
           .map(
-            (_, i) => `
-            <div class="mx-20" style="flex-basis: 300px;">
-              <div class="hidden md:block top-nav-height pb-2 border-b">
-                <div class="flex items-end text-xl leading-none md:h-8 text-gray-800">
-                  <span class="my-1 md:my-0">Week ${i}</span
-                  ><span class="flex-1 mx-2 text-right text-sm my-1 md:my-0">Col 1</span
-                  ><span class="flex-1 mx-2 text-right text-sm my-1 md:my-0"
-                    >Col 2</span
-                  >
-                </div>
-              </div>
-
-              ${Array(7)
+            () => `
+            <div class="m-20" style="flex-basis: 300px;">
+              ${Array(10)
                 .fill(null)
                 .map(
-                  (_, day) => `<div
-                class="flex border-b overflow-hidden even:bg-gray-100"
-                style="min-height: 49px"
+                  () => `<div
+                class="flex"
+                style="min-height: 50px"
               >
-                <div
-                  class="
-                    flex-shrink-0 flex
-                    items-center
-                    justify-center
-                    md:border-none
-                    border-dashed
-                  "
-                >
-                  <div class="flex items-center leading-none font-light my-2 md:my-0">
-                    <div
-                      class="
-                        tabular-nums
-                        text-xl
-                        md:text-2xl
-                        antialiased
-                        mx-2
-                        text-center
-                      "
-                    >
-                      13
-                    </div>
-                    <div class="flex flex-col w-8">
-                      <span class="text-xs">mon</span
-                      ><span class="text-2xs md:text-xs mt-.5">sep.</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="md:block border-r md:border-r-2 my-2 border-dotted"></div>
-                <div class="flex-1"></div>
-                <div class="flex-1 flex min-w-0">
-                  <div class="md:block border-r md:border-r-2 my-2 border-dotted"></div>
+                <div class="flex-1 flex">
+                  <div class="flex-1 border border-green-500"></div>
+                  <div class="flex-1 border border-green-500"></div>
+                  <div class="flex-1 border border-green-500"></div>
                 </div>
               </div>`,
                 )
@@ -116,9 +78,9 @@
   <body class="m-2">
     <button
       class="border p-2 shadow rounded bg-gray-100 mb-4 mr-2"
-      onclick="toggleCalendar()"
+      onclick="toggleGrid()"
     >
-      Toggle calendar
+      Toggle grid
     </button>
     <button
       class="border p-2 shadow rounded bg-gray-100 mb-4 mr-2"
@@ -129,13 +91,13 @@
     <span id="status" class="mb-2">Using Tailwind 1</span>
     <p class="mb-2">
       Open the timeline in Mac Safari and hit record, then press toggle to open
-      the calendar. Stop the recording and look at "Layout and rendering", sort
-      by duration.
+      the grid. Stop the recording and look at "Layout and rendering", sort by
+      duration.
       <br />Recalculate styles takes around 5 times longer on Tailwind 2 than on
       Tailwind 1 (on my Macbook Pro). The same happens in Chrome but is less
       noticeable.
     </p>
 
-    <div id="calendar" class="flex flex-wrap"></div>
+    <div id="grid" class="flex flex-wrap"></div>
   </body>
 </html>
