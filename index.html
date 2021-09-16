@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind perf test</title>
+    <link
+      id="tailwind1"
+      href="https://unpkg.com/tailwindcss@^1/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      id="tailwind2"
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+      disabled
+    />
+    <script>
+      let version = 1
+      let showCalendar = false
+
+      function toggleVersion() {
+        version = version === 1 ? 2 : 1
+        let tailwind1 = document.getElementById('tailwind1')
+        let tailwind2 = document.getElementById('tailwind2')
+        let status = document.getElementById('status')
+
+        if (version === 1) {
+          tailwind1.disabled = false
+          tailwind2.disabled = true
+        } else {
+          tailwind2.disabled = false
+          tailwind1.disabled = true
+        }
+
+        status.textContent = `Using Tailwind ${version}`
+      }
+      function toggleCalendar() {
+        let calendar = document.getElementById('calendar')
+        showCalendar = !showCalendar
+
+        if (showCalendar) {
+          calendar.innerHTML = renderCalendar()
+        } else {
+          calendar.innerHTML = ''
+        }
+      }
+
+      function renderCalendar() {
+        return Array(100)
+          .fill(null)
+          .map(
+            (_, i) => `
+            <div class="mx-20" style="flex-basis: 300px;">
+              <div class="hidden md:block top-nav-height pb-2 border-b">
+                <div class="flex items-end text-xl leading-none md:h-8 text-gray-800">
+                  <span class="my-1 md:my-0">Week ${i}</span
+                  ><span class="flex-1 mx-2 text-right text-sm my-1 md:my-0">Col 1</span
+                  ><span class="flex-1 mx-2 text-right text-sm my-1 md:my-0"
+                    >Col 2</span
+                  >
+                </div>
+              </div>
+
+              ${Array(7)
+                .fill(null)
+                .map(
+                  (_, day) => `<div
+                class="flex border-b overflow-hidden even:bg-gray-100"
+                style="min-height: 49px"
+              >
+                <div
+                  class="
+                    flex-shrink-0 flex
+                    items-center
+                    justify-center
+                    md:border-none
+                    border-dashed
+                  "
+                >
+                  <div class="flex items-center leading-none font-light my-2 md:my-0">
+                    <div
+                      class="
+                        tabular-nums
+                        text-xl
+                        md:text-2xl
+                        antialiased
+                        mx-2
+                        text-center
+                      "
+                    >
+                      13
+                    </div>
+                    <div class="flex flex-col w-8">
+                      <span class="text-xs">mon</span
+                      ><span class="text-2xs md:text-xs mt-.5">sep.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="md:block border-r md:border-r-2 my-2 border-dotted"></div>
+                <div class="flex-1"></div>
+                <div class="flex-1 flex min-w-0">
+                  <div class="md:block border-r md:border-r-2 my-2 border-dotted"></div>
+                </div>
+              </div>`,
+                )
+                .join('')}
+
+        </div>
+        `,
+          )
+          .join('')
+      }
+    </script>
+  </head>
+  <body class="m-2">
+    <button
+      class="border p-2 shadow rounded bg-gray-100 mb-4 mr-2"
+      onclick="toggleCalendar()"
+    >
+      Toggle calendar
+    </button>
+    <button
+      class="border p-2 shadow rounded bg-gray-100 mb-4 mr-2"
+      onclick="toggleVersion()"
+    >
+      Toggle Tailwind version
+    </button>
+    <span id="status" class="mb-2">Using Tailwind 1</span>
+    <p class="mb-2">
+      Open the timeline in Mac Safari and hit record, then press toggle to open
+      the calendar. Stop the recording and look at "Layout and rendering", sort
+      by duration.
+      <br />Recalculate styles takes around 5 times longer on Tailwind 2 than on
+      Tailwind 1 (on my Macbook Pro). The same happens in Chrome but is less
+      noticeable.
+    </p>
+
+    <div id="calendar" class="flex flex-wrap"></div>
+  </body>
+</html>
